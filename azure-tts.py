@@ -14,7 +14,7 @@ text_to_speak = 'Hello, world!'
 
 # Synthesize speech and save it to a file
 result = synthesizer.speak_text_async(text_to_speak).get()
-audio_file = 'output.wav'
+audio_file = 'azure-output.wav'
 with open(audio_file, 'wb') as file:
     file.write(result.audio_data)
 
