@@ -1,3 +1,6 @@
+# This file is a sample file for getting an audio file transcribed using the Rev.ai API
+
+
 from rev_ai import apiclient
 from rev_ai.models.asynchronous.job_status import JobStatus
 import time
