@@ -35,7 +35,7 @@ class Transcriber:
               sample_format=pyaudio.paInt16,
               channels=2,
               rate=44100):
-        if self.is_recording():
+        if self.is_recording:
             raise RuntimeError("Already recording")
         def loop():
             self.lock.acquire()
