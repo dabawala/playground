@@ -2,3 +2,4 @@ rev-ai==2.17.1
 openai
 pyttsx3
 tkinter
+azure-cognitiveservices-speech==1.29.0

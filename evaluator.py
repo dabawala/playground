@@ -71,7 +71,10 @@ def get_time() -> str:
 
 @wrap_command
 def get_transit_directions(starting_station: str, destination_station: str) -> str:
-    return get_bus_directions_in_english(starting_station, destination_station)
+    try:
+        return get_bus_directions_in_english(starting_station, destination_station)
+    except:
+        return "Tried to get directions, but failed - likely no bus route exists between these stations."
 
 
 #@wrap_command

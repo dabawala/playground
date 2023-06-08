@@ -2,7 +2,7 @@
 
 from transcriber import Transcriber
 from evaluator import get_full_response_for_input
-from tts import say
+from azure_tts import say
 
 import tkinter as tk # used to create graphical button
 from tkinter import ttk as ttk
