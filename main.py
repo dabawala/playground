@@ -11,3 +11,4 @@ while client.get_job_details(job.id).status != JobStatus.TRANSCRIBED: # not tran
 print("transcribed")
 transcript_text = client.get_transcript_text(job.id)
 print(transcript_text)
+# adding cooment just for fun
