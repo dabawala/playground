@@ -37,10 +37,10 @@ class Transcriber:
               rate=44100):
         if self.is_recording:
             raise RuntimeError("Already recording")
+        p = pyaudio.PyAudio()
         def loop():
             self.lock.acquire()
             self._record = True
-            p = pyaudio.PyAudio()
             self.stream = p.open(format=sample_format,
                                  channels=channels,
                                  rate=rate,
@@ -62,6 +62,7 @@ class Transcriber:
             wf.close()
             # now transcribe it!
             self.job = self.client.submit_job_local_file(filename)
+            print(f"Submitted job {self.client.get_job_details(self.job.id).status}")
             while self.client.get_job_details(self.job.id).status == JobStatus.IN_PROGRESS:
                 time.sleep(0.5)
             job_status = self.client.get_job_details(self.job.id).status
