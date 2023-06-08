@@ -1,1 +1,2 @@
 rev-ai==2.17.1
+azure-cognitiveservices-speech==1.29.0
