@@ -61,6 +61,13 @@ def get_time() -> str:
 
 
 @wrap_command
+def get_json_full_transit_directions(station_1: str, station_2: str) -> str:
+    """Takes two station names and returns a JSON string from Google Maps, with full directions"""
+    # use json.dumps(j)
+    return
+
+
+@wrap_command
 def get_bus_schedule_for_station(station_name: str) -> str:
     # FIXME - replace this with an API call to Israeli Ministry of Transportation
     s = ""
