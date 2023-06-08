@@ -57,11 +57,6 @@ def record(event):
     wf.writeframes(b''.join(frames))
     wf.close()
     # create a window to display "recording done"
-    root2 = tk.Tk()
-    frm2 = ttk.Frame(root2, padding=10)
-    frm2.grid()
-    ttk.Label(frm2, text="Recording done").grid(column=0, row=0)
-    root2.mainloop()
 
 # Create a window
 root = tk.Tk()
@@ -73,7 +68,3 @@ rec_btn = ttk.Button(frm, text="Record")
 rec_btn.grid(column=0, row=1)
 rec_btn.bind("<ButtonPress>", record)
 root.mainloop()
-
-# Create event handler for rec_btn button:
-def record():
-    pass
