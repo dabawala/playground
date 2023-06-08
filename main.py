@@ -10,16 +10,22 @@ from tkinter import ttk as ttk
 root = tk.Tk()
 frm = ttk.Frame(root, padding=10)
 rec_btn = ttk.Button(frm, text="Record")
+
+def say_and_print(text):
+    print(text)
+    say(text)
+
 def on_finish(transcript):
+    print(f"Got transcript: {transcript}")
     rec_btn["text"] = "Record"
     rec_btn["state"] = "normal"
-    say(get_full_response_for_input(transcript))
+    say_and_print(get_full_response_for_input(transcript))
 
 def on_error(reason):
     rec_btn["text"] = "Record"
     # enable button again
     rec_btn["state"] = "normal"
-    say(f"Error: {reason}")
+    say_and_print(f"Error: {reason}")
 
 t = Transcriber(on_finish, on_error)
 def transcriber_toggle(event):

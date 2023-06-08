@@ -4,6 +4,7 @@ import time
 import pyaudio
 import wave
 import threading
+import openai
 from typing import *
 
 token = "02mq7zrp5cOEKStOjfr2-yt_K21aBr4mJVnvLkcpsrK8I7EOKVz7Qh6KI6EI8YSL_tKXy2OaVKjhhr7x41AalUQ9hpkTk"
@@ -33,7 +34,7 @@ class Transcriber:
               chunk=1024,
               sample_format=pyaudio.paInt16,
               channels=2,
-              rate=44100):
+              rate=8000):
         if self.is_recording:
             raise RuntimeError("Already recording")
         p = pyaudio.PyAudio()
@@ -61,6 +62,7 @@ class Transcriber:
             wf.writeframes(b''.join(frames))
             wf.close()
             # now transcribe it!
+            """
             self.job = self.client.submit_job_local_file(filename)
             print(f"Submitted job {self.client.get_job_details(self.job.id).status}")
             while self.client.get_job_details(self.job.id).status == JobStatus.IN_PROGRESS:
@@ -71,6 +73,9 @@ class Transcriber:
                 self.on_finish(self.client.get_transcript_text(self.job.id))
             else:
                 self.on_error(self.job)
+            """
+            audio_file = open(filename, "rb")
+            self.on_finish(openai.Audio.transcribe("whisper-1", audio_file).get("text", "Could not transcribe"))
             self.lock.release()
         threading.Thread(target=loop).start()
         #loop()
@@ -79,18 +84,3 @@ class Transcriber:
         if not self._record:
             raise RuntimeError("Not recording")
         self._record = False
-
-
-if __name__ == "__main__":
-    # FIXME - replace this with a GUI
-    t = Transcriber(
-        on_finish = lambda txt: print(f"Got text: {txt}"),
-        on_error  = lambda job: print(f"Job {job.id} failed with status {job.status}")
-    )
-    t.start()
-    time.sleep(2)
-    t.stop()
-    time.sleep(2)
-    t.start()
-    time.sleep(2)
-    t.stop()

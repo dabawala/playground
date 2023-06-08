@@ -1,6 +1,8 @@
 import re
+import json
 import os
 import openai
+from maps import get_bus_directions_in_english
 from typing import *
 openai.organization = "org-hRvtVqg73V5RwDiq5NbCp6ce"
 openai.api_key = "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"
@@ -10,7 +12,8 @@ initial_prompt = """
 Hello ChatGPT, I am a friendly bus station.
 My user said: "{input}"
 I need you to give me one or more of the following instructions.
-Remember to put a newline between each instruction.
+Give me a JSON array with the key being the instruction name and the value being the instruction arguments within a list.
+Only retain relevant keys. Replace where necessary.
 Say nothing else.
 Permitted instructions:
 {permitted_instructions}
@@ -60,14 +63,18 @@ def get_time() -> str:
     return "The time is 12:00 PM."
 
 
+#@wrap_command
+#def get_json_full_transit_directions(station_1: str, station_2: str) -> str:
+#    """Takes two station names and returns a JSON string from Google Maps, with full directions"""
+#    # use json.dumps(j)
+#    return
+
 @wrap_command
-def get_json_full_transit_directions(station_1: str, station_2: str) -> str:
-    """Takes two station names and returns a JSON string from Google Maps, with full directions"""
-    # use json.dumps(j)
-    return
+def get_transit_directions(starting_station: str, destination_station: str) -> str:
+    return get_bus_directions_in_english(starting_station, destination_station)
 
 
-@wrap_command
+#@wrap_command
 def get_bus_schedule_for_station(station_name: str) -> str:
     # FIXME - replace this with an API call to Israeli Ministry of Transportation
     s = ""
@@ -77,7 +84,8 @@ def get_bus_schedule_for_station(station_name: str) -> str:
     s += f"273: 10:00, 11:00, 12:00, 13:00, 14:00, 19:00"
     return s
 
-@wrap_command
+
+#@wrap_command
 def get_bus_source_and_destinations(bus_number: str) -> str:
     # FIXME - replace this with an API call to Israeli Ministry of Transportation
     s = ""
@@ -87,7 +95,7 @@ def get_bus_source_and_destinations(bus_number: str) -> str:
     return s
 
 
-@wrap_command
+#@wrap_command
 def get_raw_bus_navigation_instructions(station_1: str, station_2: str) -> str:
     # FIXME - replace this with an API call to Google Maps
     s = ""
@@ -102,14 +110,8 @@ def get_full_response_for_input(input: str) -> str:
         input=input,
         permitted_instructions="\n".join([v["GPT_FORMAT"] for v in command_definitions.values()])
     )
-    response = ask_gpt(prompt)
-    requested_commands_and_args = [command.split(";") for command in response.split("\n") if command]
-    requested_commands = [command[0] for command in requested_commands_and_args]
-    requested_args = [command[1:] for command in requested_commands_and_args]
-    requested_commands_and_args = {
-        command: args
-        for command, args in zip(requested_commands, requested_args)
-    }
+    response = ask_gpt(prompt).strip()
+    requested_commands_and_args = json.loads(response)
     command_and_result = {
         ";".join([command]+args): command_definitions[command]["fptr"](*args)
         for command, args in requested_commands_and_args.items()
@@ -122,3 +124,8 @@ def get_full_response_for_input(input: str) -> str:
     )
     response = ask_gpt(prompt, tokens=400) 
     return response
+
+
+if __name__ == "__main__":
+    print(get_full_response_for_input("Got transcript: How do I get from Tel Aviv University railway to the heart?"))
+    print("hi")

@@ -7,7 +7,11 @@ gmaps = googlemaps.Client(key='AIzaSyB4r4HwJsKgA65MmDCwx0SpWQ50XQAqtT0')
 
 def geocode_address(address):
     # Perform geocoding request
-    geocode_result = gmaps.geocode(address)
+    try:
+        geocode_result = gmaps.geocode(address)
+    except:
+        print(f"Could not geocode address: {address}")
+        geocode_result = None
     
     # Extract the coordinates from the geocoding result
     if geocode_result:
@@ -76,15 +80,16 @@ def get_bus_directions(starting_station, destination_station):
     return directions_data
 
 # Example usage
-starting_station = "Tel Aviv Central Bus Station"
-destination_station = "Tel Aviv University Bus Station"
+#starting_station = "Tel Aviv Central Bus Station"
+#destination_station = "Tel Aviv University Bus Station"
 
-directions = get_bus_directions(starting_station, destination_station)
-if directions is not None:
-    # Translate the directions data to English
-    translated_directions = translate_directions_data(directions, 'en')
-
-    directions_json = json.dumps(translated_directions)
-    print(directions_json)
-else:
-    print("Invalid starting or destination station.")
+def get_bus_directions_in_english(starting_station, destination_station):
+    directions = get_bus_directions(starting_station, destination_station)
+    if directions is not None:
+        # Translate the directions data to English
+        translated_directions = translate_directions_data(directions, 'en')
+        directions_json = json.dumps(translated_directions)
+        return directions_json#print(directions_json)
+    else:
+        return "There is definitely no route available for this path at this time of day."
+        #print("Invalid starting or destination station.")
