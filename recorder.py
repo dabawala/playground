@@ -17,24 +17,43 @@ import time # used to wait for audio to be transcribed
 # Create event handler for rec_btn button:
 def record(event):
     # Create a pyaudio object
-    p = pyaudio.PyAudio()
-    # Create a stream
-    stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, frames_per_buffer=1024)
-    # Create a list to store the audio data
-    frames = []
-    # keep recording as long as the button is pressed
-    while event.widget.instate(['pressed']):
-        data = stream.read(1024)
+    chunk = 1024  # Record in chunks of 1024 samples
+    sample_format = pyaudio.paInt16  # 16 bits per sample
+    channels = 2
+    fs = 44100  # Record at 44100 samples per second
+    seconds = 3
+    filename = "output.wav"
+
+    p = pyaudio.PyAudio()  # Create an interface to PortAudio
+
+    print('Recording')
+
+    stream = p.open(format=sample_format,
+                    channels=channels,
+                    rate=fs,
+                    frames_per_buffer=chunk,
+                    input=True)
+
+    frames = []  # Initialize array to store frames
+
+    # Store data in chunks for 3 seconds
+    for i in range(0, int(fs / chunk * seconds)):
+        data = stream.read(chunk)
         frames.append(data)
-    # stop recording
+
+    # Stop and close the stream 
     stream.stop_stream()
     stream.close()
+    # Terminate the PortAudio interface
     p.terminate()
-    # save the audio file in mp3 format
-    wf = wave.open('testi.mp3', 'wb')
-    wf.setnchannels(1)
-    wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
-    wf.setframerate(44100)
+
+    print('Finished recording')
+
+    # Save the recorded data as a WAV file
+    wf = wave.open(filename, 'wb')
+    wf.setnchannels(channels)
+    wf.setsampwidth(p.get_sample_size(sample_format))
+    wf.setframerate(fs)
     wf.writeframes(b''.join(frames))
     wf.close()
     # create a window to display "recording done"
