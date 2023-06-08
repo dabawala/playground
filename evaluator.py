@@ -14,7 +14,7 @@ My user said: "{input}"
 I need you to give me one or more of the following instructions.
 Give me a JSON array with the key being the instruction name and the value being the instruction arguments within a list.
 Only retain relevant keys. Replace where necessary.
-Say nothing else.
+Say nothing else. If you're not sure what to do, say "UNCLEAR_INPUT".
 Permitted instructions:
 {permitted_instructions}
 """
@@ -127,5 +127,6 @@ def get_full_response_for_input(input: str) -> str:
 
 
 if __name__ == "__main__":
-    print(get_full_response_for_input("Got transcript: How do I get from Tel Aviv University railway to the heart?"))
+    
+    print(get_full_response_for_input("From Tel Aviv University to Haifa"))
     print("hi")
