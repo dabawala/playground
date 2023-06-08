@@ -21,7 +21,7 @@ def record(event):
     sample_format = pyaudio.paInt16  # 16 bits per sample
     channels = 2
     fs = 44100  # Record at 44100 samples per second
-    seconds = 3
+    seconds = 10
     filename = "output.wav"
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
@@ -57,11 +57,6 @@ def record(event):
     wf.writeframes(b''.join(frames))
     wf.close()
     # create a window to display "recording done"
-    root2 = tk.Tk()
-    frm2 = ttk.Frame(root2, padding=10)
-    frm2.grid()
-    ttk.Label(frm2, text="Recording done").grid(column=0, row=0)
-    root2.mainloop()
 
 # Create a window
 root = tk.Tk()
@@ -73,7 +68,3 @@ rec_btn = ttk.Button(frm, text="Record")
 rec_btn.grid(column=0, row=1)
 rec_btn.bind("<ButtonPress>", record)
 root.mainloop()
-
-# Create event handler for rec_btn button:
-def record():
-    pass

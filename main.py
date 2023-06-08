@@ -7,7 +7,7 @@ import time
 
 token = "02mq7zrp5cOEKStOjfr2-yt_K21aBr4mJVnvLkcpsrK8I7EOKVz7Qh6KI6EI8YSL_tKXy2OaVKjhhr7x41AalUQ9hpkTk"
 client = apiclient.RevAiAPIClient(token)
-job = client.submit_job_local_file("C:\\test2.mp3")
+job = client.submit_job_local_file(".\output.wav")
 while client.get_job_details(job.id).status != JobStatus.TRANSCRIBED: # not transcribed
     print("not done yet")
     time.sleep(1)
