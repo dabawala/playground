@@ -6,7 +6,6 @@ import wave
 import threading
 from typing import *
 
-
 token = "02mq7zrp5cOEKStOjfr2-yt_K21aBr4mJVnvLkcpsrK8I7EOKVz7Qh6KI6EI8YSL_tKXy2OaVKjhhr7x41AalUQ9hpkTk"
 
 
@@ -40,6 +39,7 @@ class Transcriber:
         p = pyaudio.PyAudio()
         def loop():
             self.lock.acquire()
+            print("Lock acquired")
             self._record = True
             self.stream = p.open(format=sample_format,
                                  channels=channels,
@@ -66,12 +66,14 @@ class Transcriber:
             while self.client.get_job_details(self.job.id).status == JobStatus.IN_PROGRESS:
                 time.sleep(0.5)
             job_status = self.client.get_job_details(self.job.id).status
+            print(f"Job {self.job.id} finished with status {job_status}")
             if job_status == JobStatus.TRANSCRIBED:
                 self.on_finish(self.client.get_transcript_text(self.job.id))
             else:
                 self.on_error(self.job)
             self.lock.release()
         threading.Thread(target=loop).start()
+        #loop()
     
     def stop(self):
         if not self._record:
@@ -82,8 +84,8 @@ class Transcriber:
 if __name__ == "__main__":
     # FIXME - replace this with a GUI
     t = Transcriber(
-        on_finish=lambda txt: print(f"Got text: {txt}"),
-        on_error=lambda job: print(f"Job {job.id} failed with status {job.status}")
+        on_finish = lambda txt: print(f"Got text: {txt}"),
+        on_error  = lambda job: print(f"Job {job.id} failed with status {job.status}")
     )
     t.start()
     time.sleep(2)

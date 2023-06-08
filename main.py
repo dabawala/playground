@@ -1,17 +1,32 @@
-# This file is a sample file for getting an audio file transcribed using the Rev.ai API
+#!/usr/bin/env python3
 
+from transcriber import Transcriber
+from evaluator import get_full_response_for_input
+from tts import say
 
-from rev_ai import apiclient
-from rev_ai.models.asynchronous.job_status import JobStatus
-import time
+t = Transcriber(
+    on_finish=lambda transcript: say(get_full_response_for_input(transcript)),
+    on_error=lambda reason: say(f"Error: {reason}"),
+)
 
-token = "02mq7zrp5cOEKStOjfr2-yt_K21aBr4mJVnvLkcpsrK8I7EOKVz7Qh6KI6EI8YSL_tKXy2OaVKjhhr7x41AalUQ9hpkTk"
-client = apiclient.RevAiAPIClient(token)
-job = client.submit_job_local_file(".\output.wav")
-while client.get_job_details(job.id).status != JobStatus.TRANSCRIBED: # not transcribed
-    print("not done yet")
-    time.sleep(1)
-print("transcribed")
-transcript_text = client.get_transcript_text(job.id)
-print(transcript_text)
-# adding cooment just for fun
+def transcriber_toggle(event):
+    if t.is_recording:
+        print("Stopped recording")
+        t.stop()
+    else:
+        print("Started recording")
+        t.start()
+
+import tkinter as tk # used to create graphical button
+from tkinter import ttk as ttk
+
+# Create a window
+root = tk.Tk()
+frm = ttk.Frame(root, padding=10)
+frm.grid()
+ttk.Label(frm, text="Please press to record").grid(column=0, row=0)
+# create a button to record audio. as long as the button is pressed, audio is recorded
+rec_btn = ttk.Button(frm, text="Record")
+rec_btn.grid(column=0, row=1)
+rec_btn.bind("<ButtonPress>", transcriber_toggle)
+root.mainloop()
