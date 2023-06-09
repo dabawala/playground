@@ -3,3 +3,6 @@ openai
 pyttsx3
 tkinter
 azure-cognitiveservices-speech==1.29.0
+mtranslate
+googlemaps
+pyaudio

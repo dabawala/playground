@@ -9,7 +9,7 @@ synthesizer = speech.SpeechSynthesizer(speech_config=speech_config)
 
 def say(text_to_speak):
     result = synthesizer.speak_text_async(text_to_speak).get()
-    audio_file = '/tmp/azure-output.wav'
+    audio_file = './tmp/azure-output.wav'
     with open(audio_file, 'wb') as file:
         file.write(result.audio_data)
     # play the audio file

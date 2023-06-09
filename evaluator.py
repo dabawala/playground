@@ -114,7 +114,10 @@ def get_full_response_for_input(input: str) -> str:
         permitted_instructions="\n".join([v["GPT_FORMAT"] for v in command_definitions.values()])
     )
     response = ask_gpt(prompt).strip()
-    requested_commands_and_args = json.loads(response)
+    try:
+        requested_commands_and_args = json.loads(response)
+    except:
+        return "Sorry, I'm not sure I understand."
     command_and_result = {
         ";".join([command]+args): command_definitions[command]["fptr"](*args)
         for command, args in requested_commands_and_args.items()
@@ -131,5 +134,5 @@ def get_full_response_for_input(input: str) -> str:
 
 if __name__ == "__main__":
     
-    print(get_full_response_for_input("From Tel Aviv University to Haifa"))
+    print(get_full_response_for_input("Get me from Tel Aviv University to Haifa"))
     print("hi")

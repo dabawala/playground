@@ -54,7 +54,7 @@ class Transcriber:
             self.stream.stop_stream()
             self.stream.close()
             p.terminate()
-            filename = f"/tmp/{time.time()}.wav"
+            filename = f"./tmp/{time.time()}.wav"
             wf = wave.open(filename, 'wb')
             wf.setnchannels(channels)
             wf.setsampwidth(p.get_sample_size(sample_format))
@@ -75,7 +75,7 @@ class Transcriber:
                 self.on_error(self.job)
             """
             audio_file = open(filename, "rb")
-            self.on_finish(openai.Audio.transcribe("whisper-1", audio_file).get("text", "Could not transcribe"))
+            self.on_finish(openai.Audio.transcribe("whisper-1", audio_file, language="en", fp16=False).get("text", "Could not transcribe"))
             self.lock.release()
         threading.Thread(target=loop).start()
         #loop()
