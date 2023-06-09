@@ -75,7 +75,10 @@ class Transcriber:
                 self.on_error(self.job)
             """
             audio_file = open(filename, "rb")
-            self.on_finish(openai.Audio.transcribe("whisper-1", audio_file, language="en", fp16=False).get("text", "Could not transcribe"))
+            try:
+                self.on_finish(openai.Audio.transcribe("whisper-1", audio_file, language="en", fp16=False).get("text", "Could not transcribe"))
+            except Exception as e:
+                self.on_error(f"Caught error: {e}")
             self.lock.release()
         threading.Thread(target=loop).start()
         #loop()

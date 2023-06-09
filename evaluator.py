@@ -5,11 +5,11 @@ import openai
 from maps import get_bus_directions_in_english
 from typing import *
 openai.organization = "org-hRvtVqg73V5RwDiq5NbCp6ce"
-openai.api_key = "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"
+openai.api_key = "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"
 openai.Model.list()
 
 initial_prompt = """
-Hello ChatGPT, I am a friendly bus station.
+Hello ChatGPT, I am a friendly bus station in Tel Aviv University.
 My user said: "{input}"
 I need you to give me one or more of the following instructions.
 Give me a JSON array with the key being the instruction name and the value being the instruction arguments within a list.
