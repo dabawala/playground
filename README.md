@@ -1,4 +1,4 @@
-# Smart Bus Station Voice Assistant
+# Smart Bus Station Voice Assistant Dabawala
 
 The Smart Bus Station Voice Assistant is an intelligent system designed to provide information and answer questions related to bus stations. It leverages voice input and natural language processing techniques to understand user queries and provides spoken responses in return. This project aims to enhance the user experience and provide a convenient way to interact with bus station information.
 
@@ -15,8 +15,8 @@ The Smart Bus Station Voice Assistant is an intelligent system designed to provi
 The Smart Bus Station Voice Assistant combines various technologies to deliver its functionality:
 
 1. Speech Recognition: The system utilizes speech recognition techniques to convert user's spoken queries into text format.
-2. Natural Language Understanding: It employs natural language understanding algorithms to analyze and interpret user queries, extracting the intent and relevant parameters.
-3. Information Retrieval: The system queries a bus station information database to retrieve the requested information based on the user's query.
+2. Natural Language Understanding: It employs natural language understanding and interpret user queries using ChatGPT, extracting the intent and relevant parameters. 
+3. Information Retrieval: The system queries a bus station information database to retrieve the requested information based on the user's query using googlemaps API.
 4. Text-to-Speech Conversion: It uses text-to-speech synthesis to convert the response text into spoken form, allowing the system to provide spoken answers to the user's queries.
 
 ## Getting Started
